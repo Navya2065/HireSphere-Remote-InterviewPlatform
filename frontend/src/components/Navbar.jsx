@@ -1,9 +1,11 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, CalendarPlus, LayoutDashboard, ListChecks, Sparkles, FileText, BarChart2 } from 'lucide-react';
+import { LogOut, CalendarPlus, LayoutDashboard, ListChecks, Sparkles, FileText, BarChart2, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
 
   const onLogout = () => {
@@ -67,9 +69,21 @@ export default function Navbar() {
                 <span className="pill-violet text-[10px]">{user.role}</span>
               </div>
 
+              {/* Theme toggle */}
+              <button
+                onClick={toggle}
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="btn-ghost !p-2 text-zinc-500 hover:text-neon-cyan transition-all duration-200"
+              >
+                {theme === 'dark'
+                  ? <Sun size={15} className="transition-transform duration-300 rotate-0" />
+                  : <Moon size={15} className="transition-transform duration-300 rotate-0" />
+                }
+              </button>
+
               <button
                 onClick={onLogout}
-                className="ml-1 btn-ghost !p-2 text-zinc-500 hover:text-rose-300"
+                className="btn-ghost !p-2 text-zinc-500 hover:text-rose-300"
                 title="Log out"
               >
                 <LogOut size={15} />

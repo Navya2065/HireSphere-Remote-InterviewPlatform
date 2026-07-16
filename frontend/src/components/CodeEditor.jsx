@@ -592,7 +592,7 @@ export default function CodeEditor({ socket, roomId, connected, readOnly = false
 
           {readOnly && (
             <button onClick={downloadCode} className="btn-ghost !px-2 !py-1 text-xs" title="Download candidate's code">
-              <Download size={13} /> Save
+              <Download size={13} /> Download
             </button>
           )}
         </div>

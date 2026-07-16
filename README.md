@@ -1,68 +1,113 @@
-# HireSphere
+# HireSphere — Remote Technical Interview Platform
 
-A full-stack interview platform where **interviewers** schedule sessions and
-conduct them with **candidates** over real-time video, chat, and a collaborative
-code editor with one-click compilation — all in a dark, neon-accented UI.
-
-- **Frontend:** React (Vite) + Tailwind CSS + React Router + Lucide icons
-- **Backend:** Node.js + Express + MongoDB (Mongoose) + JWT
-- **Real-time chat:** Socket.io
-- **Video calling:** [Stream Video React SDK](https://getstream.io/video/docs/react/) (swappable with Agora RTC)
-- **Collaborative code editor:** Monaco (`@monaco-editor/react`) synced over the same Socket.io connection, persisted per room in MongoDB
-- **Code execution:** [Piston](https://github.com/engineer-man/piston) proxy (`POST /api/code/execute`) runs JS/TS/Python/Java/C++/C#/Go/Rust in a sandbox, broadcasts output to both participants
+A production-grade, full-stack remote interview platform where **interviewers** schedule and conduct live technical sessions with **candidates** — complete with real-time video, collaborative code editing, AI evaluation, and automated hiring workflows.
 
 ---
 
-## Folder structure
+## ✨ Features
+
+### Core Interview Experience
+- **Live video calls** via Stream Video SDK (WebRTC)
+- **Real-time collaborative code editor** — Monaco Editor synced over Socket.io with language switching, syntax highlighting, and IntelliSense snippets for JS/TS/Python/Java/C++/C#/Go/Rust
+- **One-click code execution** — powered by Piston sandbox API, output broadcast to both participants instantly
+- **Real-time chat** with typing indicators and persistent message history
+
+### Interviewer Tools
+- **AI question generator** — generates role/topic-specific interview questions via Groq LLM
+- **AI code reviewer** — instant structured feedback (verdict, strengths, issues, complexity) on candidate's live code
+- **Rubric-based evaluation** — customizable criteria with 1–5 ratings and notes, submitted post-interview
+- **Candidate resume viewer** — view uploaded PDFs inline during the interview session
+- **AI interview summary** — post-interview report with performance summary, strengths, weaknesses, code quality, communication feedback, overall score (1–10), and a Hire / Maybe / No recommendation
+
+### Hiring Pipeline
+- **Interview Dashboard** — card-based pipeline view of every candidate with score, status, and notes at a glance
+- **Hiring decision system** — mark candidates as Pending / Selected / Rejected with a single click
+- **Automated decision emails** — candidates receive a branded HTML email when selected or rejected (powered by Resend, no npm package required)
+
+### UX Polish
+- Dark neon-accented UI (custom Tailwind theme — `ink-*`, `neon-*` palette)
+- Skeleton loaders on every data-fetching screen
+- Global toast notification system (success / error / warning / info)
+- Empty states with contextual CTAs
+- Role-based navigation — interviewers and candidates see different views
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 + Vite + Tailwind CSS + React Router v6 |
+| Backend | Node.js + Express.js |
+| Database | MongoDB + Mongoose |
+| Auth | JWT (7-day expiry, role-based) |
+| Real-time | Socket.io (chat + code sync + interview lifecycle) |
+| Video | Stream Video React SDK |
+| Code Editor | Monaco Editor (`@monaco-editor/react`) |
+| Code Execution | Piston API (sandboxed, 8 languages) |
+| AI / LLM | Groq API — `llama-3.1-8b-instant` (free tier, raw HTTPS) |
+| Email | Resend API (raw HTTPS — no npm package needed) |
+| Icons | Lucide React |
+
+---
+
+## 📁 Folder Structure
 
 ```
 remote-interview-platform/
 ├── backend/
-│   ├── package.json
-│   ├── .env.example
-│   ├── server.js
+│   ├── server.js                         # Express + Socket.io bootstrap
+│   ├── .env                              # Environment variables (see below)
 │   ├── config/
-│   │   └── db.js
+│   │   └── db.js                         # MongoDB connection
 │   ├── models/
-│   │   ├── User.js
-│   │   ├── Interview.js
-│   │   ├── Message.js
-│   │   └── CodeSession.js           # shared editor state per room
+│   │   ├── User.js                       # name, email, passwordHash, role
+│   │   ├── Interview.js                  # rubric + aiSummary + hiringDecision
+│   │   ├── Message.js                    # chat messages per room
+│   │   └── CodeSession.js               # shared editor state per room
 │   ├── middleware/
-│   │   ├── authMiddleware.js        # JWT verification -> req.user
-│   │   └── roleMiddleware.js        # requireRole('interviewer'|'candidate')
+│   │   ├── authMiddleware.js             # JWT verify → req.user
+│   │   └── roleMiddleware.js             # requireRole('interviewer' | 'candidate')
 │   ├── controllers/
-│   │   ├── authController.js        # signup, login, me, listCandidates
-│   │   ├── interviewController.js   # CRUD for interviews
-│   │   ├── messageController.js     # chat history fetch
-│   │   ├── videoController.js       # issues Stream video token
-│   │   └── codeController.js        # Piston proxy for code execution
+│   │   ├── authController.js             # signup, login, me, listCandidates
+│   │   ├── interviewController.js        # CRUD + rubric + hiring decision
+│   │   ├── aiController.js              # question gen, code review, AI summary
+│   │   ├── messageController.js          # chat history
+│   │   ├── videoController.js            # Stream video token
+│   │   ├── codeController.js             # Piston execution proxy
+│   │   └── resumeController.js           # PDF upload / serve / delete
 │   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── interviewRoutes.js
+│   │   ├── aiRoutes.js
 │   │   ├── messageRoutes.js
 │   │   ├── videoRoutes.js
-│   │   └── codeRoutes.js            # POST /api/code/execute
-│   └── socket/
-│       └── chatSocket.js            # Socket.io room + message handlers
+│   │   ├── codeRoutes.js
+│   │   └── resumeRoutes.js
+│   ├── socket/
+│   │   └── chatSocket.js                 # all Socket.io room logic
+│   └── utils/
+│       └── mailer.js                     # Resend HTML email sender
 │
 └── frontend/
-    ├── package.json
-    ├── .env.example
     ├── vite.config.js
     ├── tailwind.config.js
-    ├── postcss.config.js
-    ├── index.html
     └── src/
-        ├── main.jsx
-        ├── App.jsx                  # router
-        ├── index.css                # Tailwind directives
-        ├── api/axios.js             # pre-authed axios instance
-        ├── context/AuthContext.jsx  # login / signup / me / logout
+        ├── App.jsx                       # route definitions
+        ├── index.css                     # Tailwind + custom theme + animations
+        ├── api/axios.js                  # pre-authed axios instance
+        ├── context/
+        │   ├── AuthContext.jsx           # login / signup / logout
+        │   └── ToastContext.jsx          # global toast system
         ├── components/
-        │   ├── Navbar.jsx
-        │   ├── ProtectedRoute.jsx
-        │   └── CodeEditor.jsx        # Monaco + live sync over Socket.io
+        │   ├── Navbar.jsx                # role-aware nav + Avatar
+        │   ├── ProtectedRoute.jsx        # role-gated route wrapper
+        │   ├── Skeleton.jsx              # skeleton loader components
+        │   ├── CodeEditor.jsx            # Monaco + Socket.io + Piston
+        │   ├── RubricPanel.jsx           # evaluation rubric UI
+        │   ├── AIAssistPanel.jsx         # AI question gen + code review
+        │   ├── CandidateResumePanel.jsx  # PDF viewer for interviewers
+        │   └── InterviewSummaryPanel.jsx # AI post-interview report
         └── pages/
             ├── Landing.jsx
             ├── Login.jsx
@@ -70,143 +115,203 @@ remote-interview-platform/
             ├── Dashboard.jsx
             ├── ScheduleInterview.jsx
             ├── InterviewList.jsx
-            └── InterviewRoom.jsx    # video (Stream) + chat (Socket.io)
+            ├── InterviewDashboardPage.jsx  # pipeline + hiring decisions
+            ├── PreJoinCheck.jsx
+            ├── InterviewRoom.jsx           # video + editor + sidebar tabs
+            └── ResumeUpload.jsx
 ```
 
 ---
 
-## REST API
+## 🌐 REST API
 
 All protected routes require `Authorization: Bearer <token>`.
 
 ### Auth
-| Method | Path                    | Access          | Purpose                          |
-| ------ | ----------------------- | --------------- | -------------------------------- |
-| POST   | `/api/auth/signup`      | public          | Create account + returns JWT     |
-| POST   | `/api/auth/login`       | public          | Returns JWT                      |
-| GET    | `/api/auth/me`          | any auth user   | Current user                     |
-| GET    | `/api/auth/candidates`  | interviewer     | List candidates for scheduling   |
+| Method | Path | Access | Description |
+|---|---|---|---|
+| POST | `/api/auth/signup` | Public | Create account, returns JWT |
+| POST | `/api/auth/login` | Public | Returns JWT |
+| GET | `/api/auth/me` | Any | Current user info |
+| GET | `/api/auth/candidates` | Interviewer | List all candidates |
 
 ### Interviews
-| Method | Path                          | Access          | Purpose                                      |
-| ------ | ----------------------------- | --------------- | -------------------------------------------- |
-| GET    | `/api/interviews`             | any auth user   | List interviews relevant to the caller       |
-| POST   | `/api/interviews`             | interviewer     | Create a new interview slot (generates roomId) |
-| GET    | `/api/interviews/:id`         | participant     | Fetch single interview                       |
-| GET    | `/api/interviews/room/:roomId`| participant     | Resolve interview by roomId                  |
-| PATCH  | `/api/interviews/:id`         | owning interviewer | Update status / notes                    |
+| Method | Path | Access | Description |
+|---|---|---|---|
+| GET | `/api/interviews` | Any | Paginated list of your interviews |
+| POST | `/api/interviews` | Interviewer | Schedule new interview |
+| GET | `/api/interviews/:id` | Participant | Single interview |
+| GET | `/api/interviews/room/:roomId` | Participant | Lookup by room |
+| PATCH | `/api/interviews/:id` | Interviewer | Update status / notes |
+| PATCH | `/api/interviews/:id/rubric` | Interviewer | Save evaluation rubric |
+| PATCH | `/api/interviews/:id/decision` | Interviewer | Set hiring decision + trigger email |
 
-### Chat
-| Method | Path                      | Access      | Purpose                  |
-| ------ | ------------------------- | ----------- | ------------------------ |
-| GET    | `/api/messages/:roomId`   | participant | Load chat history        |
+### AI
+| Method | Path | Access | Description |
+|---|---|---|---|
+| POST | `/api/ai/questions` | Interviewer | Generate questions `{ role, topic, count }` |
+| POST | `/api/ai/review-code` | Interviewer | Review code `{ code, language }` |
+| POST | `/api/ai/summary/:interviewId` | Interviewer | Generate post-interview summary |
+| GET | `/api/ai/summary/:interviewId` | Participant | Fetch saved summary |
 
-### Video
-| Method | Path                      | Access      | Purpose                                                |
-| ------ | ------------------------- | ----------- | ------------------------------------------------------ |
-| GET    | `/api/video/token/:roomId`| participant | Issue a Stream video JWT + apiKey + callId for joining |
+### Resumes
+| Method | Path | Access | Description |
+|---|---|---|---|
+| GET | `/api/resumes/my` | Candidate | List own resumes |
+| POST | `/api/resumes/upload` | Candidate | Upload PDF (base64) |
+| GET | `/api/resumes/:id/file` | Any | Stream PDF file |
+| DELETE | `/api/resumes/:id` | Owner | Delete resume |
 
-### Code execution
-| Method | Path                      | Access      | Purpose                                                       |
-| ------ | ------------------------- | ----------- | ------------------------------------------------------------- |
-| POST   | `/api/code/execute`       | participant | Run `{ roomId, language, content }` via Piston, return `{ stdout, stderr, exitCode }`, broadcast to room over socket |
+### Other
+| Method | Path | Access | Description |
+|---|---|---|---|
+| GET | `/api/messages/:roomId` | Participant | Chat history |
+| GET | `/api/video/token/:roomId` | Participant | Stream video JWT |
+| POST | `/api/code/execute` | Participant | Run code via Piston |
+| GET | `/api/health` | Public | Health check |
 
 ---
 
-## Socket.io events
+## ⚡ Socket.io Events
 
 Client connects with `io(SOCKET_URL, { auth: { token } })`.
 
-Client → Server
-- `join-room    { roomId }`
-- `send-message { roomId, text }`
-- `code-update  { roomId, content, language }`  *(collaborative editor)*
-- `code-language { roomId, language }`           *(language switch only)*
-- `leave-room   { roomId }`
+**Client → Server**
+| Event | Payload | Description |
+|---|---|---|
+| `join-room` | `{ roomId }` | Join the room |
+| `leave-room` | `{ roomId }` | Leave the room |
+| `send-message` | `{ roomId, text }` | Send chat message |
+| `typing` | `{ roomId }` | Typing indicator start |
+| `typing-stop` | `{ roomId }` | Typing indicator stop |
+| `code-update` | `{ roomId, content, language }` | Editor change |
+| `code-language` | `{ roomId, language }` | Language-only switch |
+| `interview-end` | `{ roomId }` | End interview (interviewer only) |
 
-Server → Client
-- `chat-message  { message }`                           — broadcast to room
-- `code-state    { content, language }`                 — sent once on join
-- `code-update   { content, language, fromUserId }`     — broadcast to others
-- `code-language { language, fromUserId }`              — broadcast to others
-- `code-output   { stdout, stderr, exitCode, ranBy, ranAt }` — broadcast after `/api/code/execute`
-- `system        { type, payload }`                     — `user-joined`, `user-left`, `error`
+**Server → Client**
+| Event | Payload | Description |
+|---|---|---|
+| `chat-message` | `{ message }` | New chat message |
+| `peer-typing` | `{ userId, name }` | Peer started typing |
+| `peer-stopped-typing` | `{ userId }` | Peer stopped typing |
+| `code-state` | `{ content, language }` | Full editor state on join |
+| `code-update` | `{ content, language }` | Live editor update |
+| `code-output` | `{ stdout, stderr, exitCode, ranBy }` | Execution result |
+| `interview-update` | `{ status, startedAt, endedAt }` | Lifecycle change |
+| `system` | `{ type, payload }` | `user-joined` / `user-left` |
 
 ---
 
-## Environment variables
+## ⚙️ Environment Variables
 
-`backend/.env`
-```
+**`backend/.env`**
+```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/remote_interview_platform
-JWT_SECRET=replace_with_a_long_random_secret
+JWT_SECRET=your_long_random_secret_here
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
 
-# Stream Video
+# Stream Video SDK — https://getstream.io/video/ (free tier)
 STREAM_API_KEY=your_stream_api_key
 STREAM_API_SECRET=your_stream_api_secret
 
-# (optional) Agora alternative
-AGORA_APP_ID=your_agora_app_id
-AGORA_APP_CERTIFICATE=your_agora_app_certificate
+# Groq AI — https://console.groq.com/keys (free, no billing required)
+GROQ_API_KEY=your_groq_api_key
+
+# Resend Email — https://resend.com/api-keys (free, 3000 emails/month)
+RESEND_API_KEY=your_resend_api_key
+MAIL_FROM=HireSphere <onboarding@resend.dev>
 ```
 
-`frontend/.env`
-```
+**`frontend/.env`**
+```env
 VITE_API_URL=http://localhost:5000
 VITE_SOCKET_URL=http://localhost:5000
 ```
 
 ---
 
-## Running locally
+## 🚀 Running Locally
 
-Prereqs: Node 18+, a local MongoDB instance, and a Stream account for video credentials (free tier works).
+**Prerequisites:** Node.js 18+, MongoDB running locally
 
 ```bash
-# 1) Backend
+# 1. Backend
 cd backend
-cp .env.example .env        # fill in MONGO_URI, JWT_SECRET, STREAM_API_KEY, STREAM_API_SECRET
 npm install
-npm run dev                 # starts http://localhost:5000
+npm run dev        # → http://localhost:5000
 
-# 2) Frontend (new terminal)
+# 2. Frontend (new terminal)
 cd frontend
-cp .env.example .env
 npm install
-npm run dev                 # starts http://localhost:5173
+npm run dev        # → http://localhost:5173
 ```
 
-Then:
-1. Sign up one **interviewer** and one **candidate** (separate browsers / incognito).
-2. As the interviewer, go to **Schedule** and create a slot assigned to the candidate.
-3. Both open **Interviews → Join room** at the scheduled time.
-4. The video stage (Stream) and chat sidebar (Socket.io) appear side-by-side.
+**Quick start flow:**
+1. Sign up as **interviewer** in one browser
+2. Sign up as **candidate** in another browser / incognito
+3. Interviewer → **Schedule** → create interview for the candidate
+4. Both → **Interviews** → **Join** the room
+5. After interview ends → **Summary** tab → Generate AI report
+6. Interviewer → **Pipeline** → mark candidate Selected / Rejected → email auto-sent
 
 ---
 
-## Swapping Stream for Agora
+## 🌍 Deploying to Production
 
-The boundary is a single endpoint — `GET /api/video/token/:roomId`. To switch to
-Agora:
+| Service | Used for | Free tier |
+|---|---|---|
+| [MongoDB Atlas](https://www.mongodb.com/atlas) | Database | 512 MB |
+| [Render](https://render.com) | Backend (Node + Socket.io) | 750 hrs/month |
+| [Vercel](https://vercel.com) | Frontend (React/Vite) | Unlimited |
 
-1. In `backend/controllers/videoController.js`, replace the `jwt.sign(...)` call with
-   [`RtcTokenBuilder.buildTokenWithUid(...)`](https://docs.agora.io/en/video-calling/get-started/authentication-workflow)
-   from the `agora-access-token` npm package, using `AGORA_APP_ID` and
-   `AGORA_APP_CERTIFICATE`. Return `{ provider: 'agora', appId, token, channel: roomId, uid }`.
-2. In `frontend/src/pages/InterviewRoom.jsx`, swap the `@stream-io/video-react-sdk`
-   imports for `agora-rtc-react` (or the raw `agora-rtc-sdk-ng`), and use the
-   returned `{ appId, channel, token, uid }` to `client.join(...)`.
+**1. MongoDB Atlas**
+- Create free cluster → get connection string → set as `MONGO_URI`
 
-The rest of the app (auth, scheduling, chat, routing) is provider-agnostic.
+**2. Render (Backend)**
+- New Web Service → connect repo → root directory: `backend`
+- Build: `npm install` | Start: `node server.js`
+- Add all backend env vars in Render dashboard
+- Set `CLIENT_URL` = your Vercel frontend URL
+
+**3. Vercel (Frontend)**
+- New Project → connect repo → root directory: `frontend`
+- Build: `npm run build` | Output: `dist`
+- Add env vars:
+  ```
+  VITE_API_URL=https://your-backend.onrender.com
+  VITE_SOCKET_URL=https://your-backend.onrender.com
+  ```
 
 ---
 
-## Notes
+## 🤖 AI Features Detail
 
-- Room IDs are generated server-side as UUIDs on interview creation — clients never choose them.
-- Chat messages are persisted for up to 500 per room; adjust the limit in `messageController.js`.
-- Socket.io authenticates using the same JWT as REST, so there's only one token to manage.
-- Role-based access: only interviewers can hit `POST /api/interviews` and `/schedule`; candidates are redirected.
+All AI calls use Groq's `llama-3.1-8b-instant` via raw HTTPS (no SDK) — same pattern as the Resend email integration. Gracefully returns a `503` with a setup message if `GROQ_API_KEY` is missing.
+
+| Feature | Input | Output |
+|---|---|---|
+| Question Generator | `role`, `topic`, `count` | JSON array of questions |
+| Code Reviewer | `code`, `language` | `verdict`, `strengths`, `issues[]`, `suggestions[]`, `complexity` |
+| Interview Summary | chat transcript + code + rubric scores | `performanceSummary`, `strengths[]`, `weaknesses[]`, `codeQuality`, `communication`, `recommendation`, `overallScore` |
+
+---
+
+## 🔐 Role Permissions
+
+| Feature | Interviewer | Candidate |
+|---|---|---|
+| Schedule interviews | ✅ | ❌ |
+| Join interview room | ✅ | ✅ |
+| Run code in editor | ✅ | ✅ |
+| View Pipeline dashboard | ✅ | ❌ |
+| Generate AI summary | ✅ | ❌ |
+| Set hiring decision | ✅ | ❌ |
+| Upload resume | ❌ | ✅ |
+
+---
+
+## 📄 License
+
+MIT

@@ -5,13 +5,13 @@ export default {
     extend: {
       colors: {
         ink: {
-          900: '#07070b',
-          850: '#0b0b12',
-          800: '#111118',
-          700: '#181822',
-          600: '#1f1f2c',
-          500: '#2a2a38',
-          400: '#3a3a4a',
+          900: 'rgb(var(--ink-900) / <alpha-value>)',
+          850: 'rgb(var(--ink-850) / <alpha-value>)',
+          800: 'rgb(var(--ink-800) / <alpha-value>)',
+          700: 'rgb(var(--ink-700) / <alpha-value>)',
+          600: 'rgb(var(--ink-600) / <alpha-value>)',
+          500: 'rgb(var(--ink-500) / <alpha-value>)',
+          400: 'rgb(var(--ink-400) / <alpha-value>)',
         },
         neon: {
           cyan:    '#22d3ee',

@@ -106,6 +106,7 @@ export default function Signup() {
             <div>
               <label className="label">Full name</label>
               <input
+                id="name"
                 name="name"
                 value={form.name}
                 onChange={onChange}
@@ -119,6 +120,7 @@ export default function Signup() {
             <div>
               <label className="label">Email address</label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 value={form.email}
@@ -133,6 +135,7 @@ export default function Signup() {
             <div>
               <label className="label">Password</label>
               <input
+                id="password"
                 type="password"
                 name="password"
                 value={form.password}
@@ -149,6 +152,7 @@ export default function Signup() {
               <label className="label">I am a</label>
               <div className="grid grid-cols-2 gap-3">
                 <RoleCard
+                  id="candidateRole"
                   active={form.role === 'candidate'}
                   onClick={() => setForm({ ...form, role: 'candidate' })}
                   icon={Users}
@@ -157,6 +161,7 @@ export default function Signup() {
                   tone="cyan"
                 />
                 <RoleCard
+                  id="interviewerRole"
                   active={form.role === 'interviewer'}
                   onClick={() => setForm({ ...form, role: 'interviewer' })}
                   icon={UserCog}
@@ -168,21 +173,32 @@ export default function Signup() {
             </div>
 
             {error && (
-              <div className="flex items-start gap-2 rounded-lg border border-rose-500/30 bg-rose-500/8 px-3 py-2.5 text-sm text-rose-300">
-                <AlertCircle size={15} className="mt-0.5 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
+  <div
+    id="signupError"
+    className="flex items-start gap-2 rounded-lg border border-rose-500/30 bg-rose-500/8 px-3 py-2.5 text-sm text-rose-300"
+  >
+    <AlertCircle size={15} className="mt-0.5 shrink-0" />
+    <span>{error}</span>
+  </div>
+)}
 
-            <button
-              disabled={submitting}
-              className="btn-primary w-full py-2.5 text-sm font-semibold"
-            >
-              {submitting
-                ? <><span className="h-4 w-4 rounded-full border-2 border-ink-900/40 border-t-ink-900 animate-spin" /> Creating account…</>
-                : <><UserPlus size={15} /> Create account</>
-              }
-            </button>
+<button
+  id="signupBtn"
+  disabled={submitting}
+  className="btn-primary w-full py-2.5 text-sm font-semibold"
+>
+  {submitting ? (
+    <>
+      <span className="h-4 w-4 rounded-full border-2 border-ink-900/40 border-t-ink-900 animate-spin" />
+      {" "}Creating account…
+    </>
+  ) : (
+    <>
+      <UserPlus size={15} />
+      {" "}Create account
+    </>
+  )}
+</button>
           </form>
 
           <div className="mt-6 text-center text-sm text-zinc-400">
@@ -197,14 +213,18 @@ export default function Signup() {
   );
 }
 
-function RoleCard({ active, onClick, icon: Icon, label, desc, tone }) {
+function RoleCard({ id, active, onClick, icon: Icon, label, desc, tone }) {
   const activeStyles = tone === 'cyan'
     ? 'border-neon-cyan bg-neon-cyan/8 text-neon-cyan shadow-[0_0_0_1px_rgba(34,211,238,0.3)]'
     : 'border-neon-violet bg-neon-violet/8 text-neon-violet shadow-[0_0_0_1px_rgba(167,139,250,0.3)]';
-  const iconActive = tone === 'cyan' ? 'text-neon-cyan' : 'text-neon-violet';
+
+  const iconActive = tone === 'cyan'
+    ? 'text-neon-cyan'
+    : 'text-neon-violet';
 
   return (
     <button
+      id={id}
       type="button"
       onClick={onClick}
       className={`flex flex-col items-start gap-1.5 rounded-xl border p-3.5 text-left transition-all duration-150 ${
@@ -216,7 +236,9 @@ function RoleCard({ active, onClick, icon: Icon, label, desc, tone }) {
       <Icon size={17} className={active ? iconActive : 'text-zinc-400'} />
       <div>
         <p className="text-sm font-semibold leading-none">{label}</p>
-        <p className={`text-[11px] mt-1 ${active ? 'opacity-70' : 'text-zinc-500'}`}>{desc}</p>
+        <p className={`text-[11px] mt-1 ${active ? 'opacity-70' : 'text-zinc-500'}`}>
+          {desc}
+        </p>
       </div>
     </button>
   );

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-07-15T11:05:00 IST" name="Surefire suite" finished-at="2026-07-15T11:05:45 IST" duration-ms="45389">
+    <groups>
+    </groups>
+    <test started-at="2026-07-15T11:05:00 IST" name="Surefire test" finished-at="2026-07-15T11:05:45 IST" duration-ms="45389">
+      <class name="com.hiresphere.SignupTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:16 IST" name="setup" finished-at="2026-07-15T11:05:19 IST" duration-ms="2859" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="duplicateEmailSignupTest()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:19 IST" name="duplicateEmailSignupTest" finished-at="2026-07-15T11:05:20 IST" duration-ms="814" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateEmailSignupTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:20 IST" name="tearDown" finished-at="2026-07-15T11:05:20 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:20 IST" name="setup" finished-at="2026-07-15T11:05:22 IST" duration-ms="2247" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="emptyFieldsTest()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:22 IST" name="emptyFieldsTest" finished-at="2026-07-15T11:05:23 IST" duration-ms="237" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- emptyFieldsTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:23 IST" name="tearDown" finished-at="2026-07-15T11:05:23 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:23 IST" name="setup" finished-at="2026-07-15T11:05:27 IST" duration-ms="4410" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="shortPasswordTest()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:27 IST" name="shortPasswordTest" finished-at="2026-07-15T11:05:29 IST" duration-ms="2257" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- shortPasswordTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:29 IST" name="tearDown" finished-at="2026-07-15T11:05:29 IST" duration-ms="4" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:29 IST" name="setup" finished-at="2026-07-15T11:05:41 IST" duration-ms="11242" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="validSignupTest()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:41 IST" name="validSignupTest" finished-at="2026-07-15T11:05:45 IST" duration-ms="4454" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validSignupTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.SignupTest@17c1bced]" started-at="2026-07-15T11:05:45 IST" name="tearDown" finished-at="2026-07-15T11:05:45 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.hiresphere.SignupTest -->
+      <class name="com.hiresphere.LoginTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:00 IST" name="setup" finished-at="2026-07-15T11:05:12 IST" duration-ms="12040" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="invalidLoginTest()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:12 IST" name="invalidLoginTest" finished-at="2026-07-15T11:05:13 IST" duration-ms="1270" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidLoginTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:13 IST" name="tearDown" finished-at="2026-07-15T11:05:13 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:13 IST" name="setup" finished-at="2026-07-15T11:05:15 IST" duration-ms="2388" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="validLoginTest()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:15 IST" name="validLoginTest" finished-at="2026-07-15T11:05:16 IST" duration-ms="1074" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validLoginTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.hiresphere.LoginTest@400cff1a]" started-at="2026-07-15T11:05:16 IST" name="tearDown" finished-at="2026-07-15T11:05:16 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.hiresphere.LoginTest -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>
