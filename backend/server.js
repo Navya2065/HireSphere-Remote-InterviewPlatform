@@ -20,7 +20,15 @@ const server = http.createServer(app);
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 // Core middleware
-app.use(cors({ origin: CLIENT_URL, credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://hire-sphere-remote-interview-platform-exqhc1yq8.vercel.app"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json({ limit: '20mb' })); // raised for base64 PDF uploads
 
 // Health check
