@@ -22,7 +22,10 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 // Core middleware
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://hire-sphere-remote-interview-platform-exqhc1yq8.vercel.app"
+  "https://hire-sphere-remote-interview-platform-exqhc1yq8.vercel.app",
+
+  "https://hire-sphere-remote-interview-platform-fcemk88ff.vercel.app"
+
 ];
 
 app.use(cors({
