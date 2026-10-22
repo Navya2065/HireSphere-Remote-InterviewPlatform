@@ -12,7 +12,7 @@ const CodeSession = require('../models/CodeSession');
 function callGroq(apiKey, prompt, maxTokens = 1500) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
-      model: 'llama-3.1-8b-instant',
+      model: 'openai/gpt-oss-20b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: maxTokens,
       temperature: 0.7,
