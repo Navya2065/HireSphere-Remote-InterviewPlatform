@@ -6,12 +6,17 @@ const Resume  = require('../models/Resume');
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
+
 const UPLOAD_DIR = path.join(__dirname, '..', 'uploads', 'resumes');
 
 /** Decode base64 → Buffer → write to disk. Returns the file path. */
 function savePdf(base64Data, resumeId) {
-  const buf  = Buffer.from(base64Data, 'base64');
+  // Create the directory if it doesn't exist
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+  const buf = Buffer.from(base64Data, 'base64');
   const dest = path.join(UPLOAD_DIR, `${resumeId}.pdf`);
+
   fs.writeFileSync(dest, buf);
   return dest;
 }
